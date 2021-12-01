@@ -1,8 +1,20 @@
 import ReactDOM from "react-dom";
-import React from "react";
+import React, { useState } from "react";
+import NewTodoInput from './NewTodoInput.tsx';
+import TodoList from './TodoList.tsx';
+
+type Todos = { 
+  text: string;
+  status: 'yet' | 'complete' | 'prosess';
+};
 
 function App() {
-  const name = "jn";
-  return <h1>Hello {name}</h1>;
+  const [todos, setTodos] = useState<Todos>([{text: '', status: ''}]);
+  return (
+    <>
+      <NewTodoInput />
+      <TodoList todos={todos} />
+    </>
+  )
 }
 ReactDOM.render(<App />, document.getElementById("app"));

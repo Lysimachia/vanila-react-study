@@ -1,9 +1,9 @@
 import React from 'react'
 
-function NewTodoInput() {
+function NewTodoInput({onKeyDown}) {
   return (
     <div>
-      <input placeholder="todos" />     
+      <input placeholder="todos" onKeyDown={onKeyDown} />     
     </div>
   )
 }

@@ -1,7 +1,16 @@
 import React from 'react'
 
-function Filter({todos}) {
-  const message = '';
+interface Todo {
+  id: number | null;
+  text: string;
+  status: 'yet' | 'process' | 'completed' | null;
+}
+interface FilterProps {
+  todos: Todo[];
+}
+
+function Filter({todos}: FilterProps) {
+  let message = '';
   if(todos.length === 0) {
     message = 'There is no active Item left';
   }

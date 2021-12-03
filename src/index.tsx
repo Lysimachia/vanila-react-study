@@ -7,12 +7,12 @@ import Filter from './Filter';
 interface Todos {
   id: number | null;
   text: string;
-  status: 'yet' | 'process' | 'completed' | null;
+  status: 'yet' | 'process' | 'completed' | 'eidt' | null;
 }
 
 function App() {
   const [newTodo, setNewTodo] = useState('');
-  const [todos, setTodos] = useState([{id: null ,text: '', status: null}]);
+  const [todos, setTodos] = useState([{id: Date.now() ,text: '가', status: null}]);
   
   const onChange = (e: any) => {
     setNewTodo(e.target.value);
@@ -29,8 +29,24 @@ function App() {
     }
   }
 
-  const onDelete = (id: Pick<Todos, 'id'>) => {
+  const onDelete = (id: number) => {
     setTodos(todos.filter(todo => todo.id !== id));
+  }
+
+  const setEditMode = (next: any) => {
+    if(next.status !== 'edit'){
+      setTodos(todos.map(prev => prev.id === next.id 
+        ? {...prev, status: 'edit'}
+        : prev
+        ));
+    } else {
+      setTodos(todos.map(prev => prev.id === next.id 
+        ? {...prev, status: ''}
+        : prev
+        ));
+    }
+    
+    
   }
 
   return (
@@ -39,6 +55,7 @@ function App() {
       <TodoList 
         todos={todos.filter(todo => todo.id != null)} 
         onDelete={onDelete} 
+        setEditMode={setEditMode}
       />
       <Filter todos={todos.filter(todo => todo.id != null)} />
     </>

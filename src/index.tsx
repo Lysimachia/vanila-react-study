@@ -11,15 +11,21 @@ interface Todos {
 }
 
 function App() {
+  const [newTodo, setNewTodo] = useState('');
   const [todos, setTodos] = useState([{id: null ,text: '', status: null}]);
   
+  const onChange = (e: any) => {
+    setNewTodo(e.target.value);
+  }
+
   const onKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     const { code } = e;
+    const { isComposing } = e.nativeEvent;
     const { value } = target;
-    if(code === 'Enter') {
-      setTodos([...todos, {id:todos.length, text: value, status: ''}]);
-      target.value = '';
+    if(code === 'Enter' && !isComposing) {
+      setTodos([...todos, {id:Date.now(), text: value, status: ''}]);
+      setNewTodo('');
     }
   }
 
@@ -29,7 +35,7 @@ function App() {
 
   return (
     <>
-      <NewTodoInput onKeyDown={onKeyDown} />
+      <NewTodoInput newTodo={newTodo} onKeyDown={onKeyDown} onChange={onChange}/>
       <TodoList 
         todos={todos.filter(todo => todo.id != null)} 
         onDelete={onDelete} 

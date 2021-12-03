@@ -2,12 +2,14 @@ import React from 'react'
 
 interface NewTodoInputProps {
   onKeyDown: React.KeyboardEventHandler<HTMLInputElement>;
+  newTodo: string;
+  onChange: any;
 }
 
-function NewTodoInput({onKeyDown}: NewTodoInputProps) {
+function NewTodoInput({onKeyDown, newTodo, onChange}: NewTodoInputProps) {
   return (
     <div>
-      <input placeholder="todos" onKeyDown={onKeyDown} />     
+      <input placeholder="todos" value={newTodo} onChange={onChange} onKeyDown={onKeyDown} />     
     </div>
   )
 }

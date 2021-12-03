@@ -7,9 +7,10 @@ interface Todo {
 }
 interface FilterProps {
   todos: Todo[];
+  onDeleteAll: any;
 }
 
-function Filter({todos}: FilterProps) {
+function Filter({todos, onDeleteAll}: FilterProps) {
   let message = '';
   if(todos.length === 0) {
     message = 'There is no active Item left';
@@ -30,7 +31,7 @@ function Filter({todos}: FilterProps) {
         <div><a href="">Complete</a> </div>
       </div>
       <div>
-        <button>Complate All</button>
+        <button onClick={()=>onDeleteAll()}>Complate All</button>
       </div>
     </>
   )

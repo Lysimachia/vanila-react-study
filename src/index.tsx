@@ -12,13 +12,13 @@ interface Todos {
 
 function App() {
   const [newTodo, setNewTodo] = useState('');
-  const [todos, setTodos] = useState([{id: Date.now() ,text: '가', status: null}]);
+  const [todos, setTodos] = useState([{id: null, text: '', status: null}]);
   
   const onChange = (e: any) => {
     setNewTodo(e.target.value);
   }
 
-  const onKeyDown = (e:React.KeyboardEvent<HTMLInputElement>) => {
+  const onCreate = (e:React.KeyboardEvent<HTMLInputElement>) => {
     const target = e.target as HTMLInputElement;
     const { code } = e;
     const { isComposing } = e.nativeEvent;
@@ -33,10 +33,20 @@ function App() {
     setTodos(todos.filter(todo => todo.id !== id));
   }
 
+  const onDeleteAll = () => {
+    setTodos([{id: null, text: '', status: null}]);
+  }
+
+  const onEdit = (next: any) => {
+    setTodos(todos.map(prev => prev.id === next.id 
+      ? {...prev, text: next.text}
+      : prev))
+  }
+
   const setEditMode = (next: any) => {
     if(next.status !== 'edit'){
       setTodos(todos.map(prev => prev.id === next.id 
-        ? {...prev, status: 'edit'}
+        ? { ...next, status: 'edit'}
         : prev
         ));
     } else {
@@ -45,19 +55,21 @@ function App() {
         : prev
         ));
     }
-    
-    
   }
 
   return (
     <>
-      <NewTodoInput newTodo={newTodo} onKeyDown={onKeyDown} onChange={onChange}/>
+      <NewTodoInput newTodo={newTodo} onKeyDown={onCreate} onChange={onChange}/>
       <TodoList 
         todos={todos.filter(todo => todo.id != null)} 
         onDelete={onDelete} 
         setEditMode={setEditMode}
+        onEdit={onEdit}
       />
-      <Filter todos={todos.filter(todo => todo.id != null)} />
+      <Filter 
+        todos={todos.filter(todo => todo.id != null)} 
+        onDeleteAll={onDeleteAll}
+        />
     </>
   )
 }

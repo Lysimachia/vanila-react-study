@@ -10,23 +10,27 @@ interface TodoItemProps {
   todo: Todo;
   onDelete: any;
   setEditMode: any;
+  onEdit: any;
 }
 
 interface TodoListProps {
   todos: Todo[];
   onDelete: any;
   setEditMode: any;
+  onEdit: any;
 }
 
-function TodoItem ({todo, onDelete, setEditMode}:TodoItemProps) {
+function TodoItem ({todo, onDelete, setEditMode, onEdit}:TodoItemProps) {
   return (
     <li>
       <input type="checkbox" name="text" />
       <label htmlFor="text" onDoubleClick={() => setEditMode(todo)}>{todo.text}</label>
       <input 
         type="text" 
-        value={todo.text}  
-        style={{display: todo.status === 'edit' ? 'inline' : 'none'}}/>
+        value={todo.text}
+        style={{display: todo.status === 'edit' ? 'inline' : 'none'}}
+        onChange={() => onEdit(todo)}
+        />
       <span>
         <button onClick={() => onDelete(todo.id)}>x</button>
       </span>
@@ -34,7 +38,7 @@ function TodoItem ({todo, onDelete, setEditMode}:TodoItemProps) {
   )
 }
 
-function TodoList({ todos, onDelete, setEditMode }: TodoListProps) {
+function TodoList({ todos, onDelete, setEditMode, onEdit }: TodoListProps) {
   return (
     <ul>
       {
@@ -44,6 +48,7 @@ function TodoList({ todos, onDelete, setEditMode }: TodoListProps) {
             key={todo.id} 
             onDelete={onDelete} 
             setEditMode={setEditMode}
+            onEdit={onEdit}
           />
         ))
       }

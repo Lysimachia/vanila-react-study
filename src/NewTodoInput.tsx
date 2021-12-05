@@ -1,15 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Todo } from './global'
 
 interface NewTodoInputProps {
-  onKeyDown: React.KeyboardEventHandler<HTMLInputElement>;
-  newTodo: string;
-  onChange: any;
+  addTodo: (text: string) => void;
 }
 
-function NewTodoInput({onKeyDown, newTodo, onChange}: NewTodoInputProps) {
+function NewTodoInput({ addTodo }: NewTodoInputProps) {
+  const [newTodo, setNewTodo] = useState('');
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewTodo(e.target.value);
+  }
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>){
+    if(e.code === 'Enter' && !e.nativeEvent.isComposing) {
+      addTodo(newTodo);
+      setNewTodo('');
+    }
+  }
+
   return (
     <div>
-      <input placeholder="todos" value={newTodo} onChange={onChange} onKeyDown={onKeyDown} />     
+      <input placeholder="todos" value={newTodo} onChange={handleChange} onKeyDown={handleKeyDown} />
     </div>
   )
 }

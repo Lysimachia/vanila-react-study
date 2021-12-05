@@ -3,72 +3,51 @@ import React, { useState } from "react";
 import NewTodoInput from './NewTodoInput';
 import TodoList from './TodoList';
 import Filter from './Filter';
-
-interface Todos {
-  id: number | null;
-  text: string;
-  status: 'yet' | 'process' | 'completed' | 'eidt' | null;
-}
+import { Todo } from './global'
 
 function App() {
-  const [newTodo, setNewTodo] = useState('');
-  const [todos, setTodos] = useState([{id: null, text: '', status: null}]);
+  const initValue: Array<Todo> = [{ id: Date.now(), text: 'test', active: false,completed: false}];
+  const [todos, setTodos] = useState<Array<Todo>>(initValue);
   
-  const onChange = (e: any) => {
-    setNewTodo(e.target.value);
+  const addTodo = (text: string) => {
+    setTodos(old => [...old, { id: Date.now(), text, active: false, completed: false }]);
   }
 
-  const onCreate = (e:React.KeyboardEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    const { code } = e;
-    const { isComposing } = e.nativeEvent;
-    const { value } = target;
-    if(code === 'Enter' && !isComposing) {
-      setTodos([...todos, {id:Date.now(), text: value, status: ''}]);
-      setNewTodo('');
-    }
+  const deleteTodo = (id: number) => {
+    setTodos(old => old.filter(todo => todo.id !== id));
   }
 
-  const onDelete = (id: number) => {
-    setTodos(todos.filter(todo => todo.id !== id));
+  const deleteAllTodos = () => {
+    setTodos([]);
   }
 
-  const onDeleteAll = () => {
-    setTodos([{id: null, text: '', status: null}]);
+  const activeTodo = (id:number) => {
+    setTodos(todos.map(todo => todo.id === id ? {...todo, active: !todo.active} : todo));
   }
 
-  const onEdit = (next: any) => {
-    setTodos(todos.map(prev => prev.id === next.id 
-      ? {...prev, text: next.text}
-      : prev))
+  const completeTodo = (id: number) => {
+    setTodos(todos.map(todo => todo.id === id ? {...todo, completed: !todo.completed} : todo));
+  };
+
+  const editTodo = (id: number, text: string) => {
+  setTodos(todos.map(todo => todo.id === id ? {...todo, text: text} : todo));
   }
 
-  const setEditMode = (next: any) => {
-    if(next.status !== 'edit'){
-      setTodos(todos.map(prev => prev.id === next.id 
-        ? { ...next, status: 'edit'}
-        : prev
-        ));
-    } else {
-      setTodos(todos.map(prev => prev.id === next.id 
-        ? {...prev, status: ''}
-        : prev
-        ));
-    }
-  }
 
   return (
     <>
-      <NewTodoInput newTodo={newTodo} onKeyDown={onCreate} onChange={onChange}/>
+      <h1>Todos</h1>
+      <NewTodoInput addTodo={addTodo} />
       <TodoList 
-        todos={todos.filter(todo => todo.id != null)} 
-        onDelete={onDelete} 
-        setEditMode={setEditMode}
-        onEdit={onEdit}
+        todos={todos} 
+        deleteTodo={deleteTodo} 
+        completeTodo={completeTodo}
+        activeTodo={activeTodo}
+        editTodo={editTodo}
       />
       <Filter 
-        todos={todos.filter(todo => todo.id != null)} 
-        onDeleteAll={onDeleteAll}
+        todos={todos} 
+        deleteAllTodos={deleteAllTodos}
         />
     </>
   )

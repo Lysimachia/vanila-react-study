@@ -1,16 +1,11 @@
 import React from 'react'
-
-interface Todo {
-  id: number | null;
-  text: string;
-  status: 'yet' | 'process' | 'completed' | null;
-}
+import { Todo } from './global'
 interface FilterProps {
   todos: Todo[];
-  onDeleteAll: any;
+  deleteAllTodos: () => void;
 }
 
-function Filter({todos, onDeleteAll}: FilterProps) {
+function Filter({todos, deleteAllTodos}: FilterProps) {
   let message = '';
   if(todos.length === 0) {
     message = 'There is no active Item left';
@@ -26,12 +21,12 @@ function Filter({todos, onDeleteAll}: FilterProps) {
     <>
       <div>
         <span>{message}</span>
-        <div><a href="">All</a></div>
-        <div><a href="">Prosess</a> </div>
-        <div><a href="">Complete</a> </div>
+        <div><button type="button">All</button></div>
+        <div><button type="button">Prosess</button> </div>
+        <div><button type="button">Complete</button> </div>
       </div>
       <div>
-        <button onClick={()=>onDeleteAll()}>Complate All</button>
+        <button onClick={() => deleteAllTodos()}>Complate All</button>
       </div>
     </>
   )

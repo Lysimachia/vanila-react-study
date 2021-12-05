@@ -4,9 +4,13 @@ import NewTodoInput from './NewTodoInput';
 import TodoList from './TodoList';
 import Filter from './Filter';
 import { Todo } from './global'
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import './style.css'
 
 function App() {
-  const initValue: Array<Todo> = [{ id: Date.now(), text: 'test', active: false,completed: false}];
+  const initValue: Array<Todo> = [];
   const [todos, setTodos] = useState<Array<Todo>>(initValue);
   
   const addTodo = (text: string) => {
@@ -35,8 +39,8 @@ function App() {
 
 
   return (
-    <>
-      <h1>Todos</h1>
+    <Container maxWidth="sm" sx={{ textAlign: "center", p: 0}}>
+      <Typography variant="h1" component="div">Todos</Typography>
       <NewTodoInput addTodo={addTodo} />
       <TodoList 
         todos={todos} 
@@ -49,7 +53,7 @@ function App() {
         todos={todos} 
         deleteAllTodos={deleteAllTodos}
         />
-    </>
+    </Container>
   )
 }
 ReactDOM.render(<App />, document.getElementById("app"));

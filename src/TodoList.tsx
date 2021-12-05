@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Todo }from './global';
-import './style.css';
+import IconButton from '@mui/material/IconButton';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Checkbox from '@mui/material/Checkbox';
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import TextField from '@mui/material/TextField';
+import SaveIcon from '@mui/icons-material/Save';
 interface TodoItemProps {
   todo: Todo;
   deleteTodo: (id: number) => void;
@@ -26,22 +37,60 @@ function TodoItem ({ todo, deleteTodo, completeTodo, activeTodo, editTodo }:Todo
   }
 
   return (
-    <li>
-      <input 
-        type="checkbox" 
-        checked={completed ? true : false}
-        onChange={() => completeTodo(id, status)}
-      />
-      {
-        editMode ? 
-        <input type="text" value={change} onChange={handleChange} onKeyDown={handleKeyDown}/>
-        : <label className={active ? 'active' : null} onClick={() => activeTodo(id)}>{text}</label>
-      }
-      <span>
-        <button onClick={() => setEditMode(!editMode)}>edit</button>
-        <button onClick={() => deleteTodo(id)}>x</button>
-      </span>
-    </li>
+    <ListItem 
+      sx={{ width:'100%' }}
+      className="todo-item"
+    >
+      <ListItemButton 
+        onClick={() => completeTodo(id, status)} 
+        sx={{ width:'80%' }}
+      >
+        <ListItemIcon >
+          <Checkbox
+            edge="start"
+            checked={completed ? true : false}
+            tabIndex={-1}
+            disableRipple
+          />
+        </ListItemIcon>
+        {
+          editMode ? 
+          <TextField 
+            fullWidth
+            value={change} 
+            variant="standard" 
+            onChange={handleChange} 
+            onKeyDown={handleKeyDown}
+            className="edit-input"
+          />
+          :<ListItemText 
+            className={active ? 'active' : null}  
+            primary={text} 
+          />
+        }
+      </ListItemButton>
+      
+      <ListItemButton 
+        aria-label="edit" 
+        onClick={() => {
+          setEditMode(!editMode); 
+          editTodo(id, text);
+          }} >
+        {
+          editMode 
+          ? <SaveIcon />
+          : <EditIcon />
+        }
+      </ListItemButton>
+
+      <ListItemButton 
+        aria-label="delete" 
+        onClick={() => deleteTodo(id)}
+      >
+        <DeleteIcon />
+      </ListItemButton>
+
+    </ListItem>
   )
 }
 
@@ -55,7 +104,8 @@ interface TodoListProps {
 
 function TodoList({ todos, deleteTodo, completeTodo, activeTodo, editTodo }: TodoListProps) {
   return (
-    <ul>
+    <section className="todo-list">  
+      <List sx={{ mb: 5 }}>
       {
         todos.map((todo) => (
           <TodoItem 
@@ -68,7 +118,9 @@ function TodoList({ todos, deleteTodo, completeTodo, activeTodo, editTodo }: Tod
           />
         ))
       }
-    </ul>
+      </List>
+    </section>
+ 
   )
 }
 

@@ -17,10 +17,11 @@ interface TodoItemProps {
   deleteTodo: (id: number) => void;
   completeTodo: (id: number, status: string) => void;
   activeTodo: (id: number) => void;
-  editTodo: (id:number, text: string) => void; 
+  editTodo: (id:number, text: string) => void;
+  filter: string;
 }
 
-function TodoItem ({ todo, deleteTodo, completeTodo, activeTodo, editTodo }:TodoItemProps) {
+function TodoItem ({ todo, deleteTodo, completeTodo, activeTodo, editTodo,filter }:TodoItemProps) {
   const { id, text, active, completed } = todo;
   const [ change, setChange ] = useState(text);
   const [ editMode, setEditMode ] = useState(false);
@@ -35,7 +36,6 @@ function TodoItem ({ todo, deleteTodo, completeTodo, activeTodo, editTodo }:Todo
       setEditMode(!editMode)
     }
   }
-
   return (
     <ListItem 
       sx={{ width:'100%' }}
@@ -118,6 +118,7 @@ function TodoList({ todos, deleteTodo, completeTodo, activeTodo, editTodo, filte
             completeTodo={completeTodo}
             activeTodo={activeTodo}
             editTodo={editTodo}
+            filter={filter}
           />
         ))
       }

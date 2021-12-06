@@ -39,15 +39,28 @@ function App() {
   }
 
   const changeFilter = (filter: FilterType) => {
-
+    setFilter(filter);
   }
+
+  const getFilterdList = (filter: FilterType) => {
+    if(filter === 'active'){
+      return todos.filter(old => old.active);
+    }
+    if(filter === 'completed'){
+      return todos.filter(old => old.completed);
+    }
+    else {
+      return todos;
+    }
+  }
+  const filteredList = getFilterdList(filter as FilterType);
 
   return (
     <Container maxWidth="sm" sx={{ textAlign: "center", p: 0}}>
       <Typography variant="h1" component="div">Todos</Typography>
       <NewTodoInput addTodo={addTodo} />
       <TodoList 
-        todos={todos} 
+        todos={filteredList} 
         deleteTodo={deleteTodo} 
         completeTodo={completeTodo}
         activeTodo={activeTodo}
@@ -55,7 +68,7 @@ function App() {
         filter={filter}
       />
       <Filter 
-        todos={todos} 
+        todos={filteredList} 
         deleteAllTodos={deleteAllTodos}
         changeFilter={changeFilter}
         />

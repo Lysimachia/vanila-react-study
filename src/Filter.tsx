@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Todo } from './global'
+import { Todo, FilterType } from './global'
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -7,10 +7,15 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 interface FilterProps {
   todos: Todo[];
   deleteAllTodos: () => void;
+  changeFilter: (filter: FilterType) => void;
 }
 
-function Filter({todos, deleteAllTodos}: FilterProps) {
-  const [ filter, setFilter ] = useState('all')
+function Filter({todos, deleteAllTodos, changeFilter}: FilterProps) {
+  const [ filter, setFilter ] = useState('all');
+  const handleFilterClick = (filter: FilterType) => {
+    setFilter(filter);
+    changeFilter(filter);
+  }  
   let message = '';
   if(todos.length === 0) {
     message = 'There is no active Item left';
@@ -32,11 +37,13 @@ function Filter({todos, deleteAllTodos}: FilterProps) {
           }}
         >
           <span>{message}</span>
+
            <ToggleButtonGroup value={filter}>
-            <ToggleButton value="all">All</ToggleButton>
-            <ToggleButton value="active" >Active</ToggleButton>
-            <ToggleButton value="completed">Completed</ToggleButton> 
+            <ToggleButton value="all" onClick={() => handleFilterClick('all')}>All</ToggleButton>
+            <ToggleButton value="active" onClick={() => handleFilterClick('active')}>Active</ToggleButton>
+            <ToggleButton value="completed" onClick={() => handleFilterClick('completed')}>Completed</ToggleButton> 
           </ToggleButtonGroup>
+          
           <span>
           <Button onClick={() => deleteAllTodos()} sx={{ color: 'text.primary' }}>Complate All</Button>
         </span>

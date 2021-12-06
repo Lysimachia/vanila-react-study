@@ -41,18 +41,14 @@ function TodoItem ({ todo, deleteTodo, completeTodo, activeTodo, editTodo }:Todo
       sx={{ width:'100%' }}
       className="todo-item"
     >
-      <ListItemButton 
-        onClick={() => completeTodo(id, status)} 
-        sx={{ width:'80%' }}
-      >
         <ListItemIcon >
           <Checkbox
-            edge="start"
+            edge="end"
             checked={completed ? true : false}
-            tabIndex={-1}
-            disableRipple
+            onClick={() => completeTodo(id, status)}
           />
         </ListItemIcon>
+
         {
           editMode ? 
           <TextField 
@@ -64,11 +60,17 @@ function TodoItem ({ todo, deleteTodo, completeTodo, activeTodo, editTodo }:Todo
             className="edit-input"
           />
           :<ListItemText 
+            onClick={() => activeTodo(id)}
             className={active ? 'active' : null}  
             primary={text} 
+            sx={{ width:'80%', 
+               cursor: 'pointer',
+            ' .MuiTypography-root': {
+              fontSize: '1.5rem'
+            },
+            }}        
           />
         }
-      </ListItemButton>
       
       <ListItemButton 
         aria-label="edit" 
@@ -100,9 +102,10 @@ interface TodoListProps {
   completeTodo: (id: number) => void;
   activeTodo: (id: number) => void;
   editTodo: (id: number, text: string) => void;
+  filter: string;
 }
 
-function TodoList({ todos, deleteTodo, completeTodo, activeTodo, editTodo }: TodoListProps) {
+function TodoList({ todos, deleteTodo, completeTodo, activeTodo, editTodo, filter }: TodoListProps) {
   return (
     <section className="todo-list">  
       <List sx={{ mb: 5 }}>

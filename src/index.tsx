@@ -3,15 +3,16 @@ import React, { useState } from "react";
 import NewTodoInput from './NewTodoInput';
 import TodoList from './TodoList';
 import Filter from './Filter';
-import { Todo } from './global'
+import { Todo, FilterType } from './global'
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import './style.css'
 
 function App() {
-  const initValue: Array<Todo> = [];
-  const [todos, setTodos] = useState<Array<Todo>>(initValue);
+  const initValue: Array<Todo> = [{id: Date.now(), text: 'test', active: false, completed: false}];
+  const [ todos, setTodos ] = useState<Array<Todo>>(initValue);
+  const [ filter, setFilter ] = useState('all');
   
   const addTodo = (text: string) => {
     setTodos(old => [...old, { id: Date.now(), text, active: false, completed: false }]);
@@ -34,9 +35,12 @@ function App() {
   };
 
   const editTodo = (id: number, text: string) => {
-  setTodos(todos.map(todo => todo.id === id ? {...todo, text: text} : todo));
+    setTodos(todos.map(todo => todo.id === id ? {...todo, text: text} : todo));
   }
 
+  const changeFilter = (filter: FilterType) => {
+
+  }
 
   return (
     <Container maxWidth="sm" sx={{ textAlign: "center", p: 0}}>
@@ -48,10 +52,12 @@ function App() {
         completeTodo={completeTodo}
         activeTodo={activeTodo}
         editTodo={editTodo}
+        filter={filter}
       />
       <Filter 
         todos={todos} 
         deleteAllTodos={deleteAllTodos}
+        changeFilter={changeFilter}
         />
     </Container>
   )

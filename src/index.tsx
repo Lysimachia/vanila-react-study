@@ -1,5 +1,5 @@
 import ReactDOM from "react-dom";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NewTodoInput from './NewTodoInput';
 import TodoList from './TodoList';
 import Filter from './Filter';
@@ -14,6 +14,18 @@ function App() {
   const [ todos, setTodos ] = useState<Array<Todo>>(initValue);
   const [ filter, setFilter ] = useState('all');
   
+  useEffect(() => {
+    const saved = localStorage.getItem('TODO-LIST');
+    if(saved) {
+      setTodos(JSON.parse(saved));
+    };
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('TODO-LIST', JSON.stringify(todos))
+  }, [todos])
+
+
   const addTodo = (text: string) => {
     setTodos(old => [...old, { id: Date.now(), text, active: false, completed: false }]);
   }
